@@ -443,6 +443,61 @@ const TOOLS = [
     },
   },
   {
+    name: "get_ticket_studio",
+    description: "Get the current Ticket Studio canvas design and browse all available templates.",
+    inputSchema: {
+      type: "object",
+      properties: { eventId: { type: "string" } },
+      required: ["eventId"],
+    },
+  },
+  {
+    name: "apply_ticket_template",
+    description: "Apply a Ticket Studio template to an event by template ID, with optional color and logo overrides.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        templateId: { type: "string" },
+        primaryColor: { type: "string" },
+        logoUrl: { type: "string" },
+        publish: { type: "boolean" },
+      },
+      required: ["eventId", "templateId"],
+    },
+  },
+  {
+    name: "update_ticket_canvas",
+    description: "Edit the Ticket Studio canvas: background, accent color swap, pattern, name, publish.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        backgroundType: { type: "string", enum: ["color", "gradient", "pattern"] },
+        backgroundColor: { type: "string" },
+        backgroundSecondaryColor: { type: "string" },
+        backgroundGradientAngle: { type: "number" },
+        backgroundPattern: { type: "string", enum: ["mesh", "dots", "radial", "stripes", "clean"] },
+        swapPrimaryColor: { type: "string" },
+        designName: { type: "string" },
+        publish: { type: "boolean" },
+      },
+      required: ["eventId"],
+    },
+  },
+  {
+    name: "publish_ticket_studio",
+    description: "Validate and publish the Ticket Studio design. Requires confirm: true.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        confirm: { type: "boolean" },
+      },
+      required: ["eventId"],
+    },
+  },
+  {
     name: "design_ticket",
     description: "Customise the visual design of digital ticket passes for an event. Set template, style, brand colors, QR position, custom message, and category accent colors.",
     inputSchema: {
@@ -549,6 +604,20 @@ async function callTool(
     case "design_ticket": {
       const { eventId, ...body } = args;
       return urpass("PATCH", `/events/${eventId}/design`, body);
+    }
+    case "get_ticket_studio":
+      return urpass("GET", `/events/${args.eventId}/studio`);
+    case "apply_ticket_template": {
+      const { eventId, ...body } = args;
+      return urpass("POST", `/events/${eventId}/studio/template`, body);
+    }
+    case "update_ticket_canvas": {
+      const { eventId, ...body } = args;
+      return urpass("PATCH", `/events/${eventId}/studio/canvas`, body);
+    }
+    case "publish_ticket_studio": {
+      const { eventId, ...body } = args;
+      return urpass("POST", `/events/${eventId}/studio/publish`, body);
     }
     case "send_announcement": {
       const { eventId, ...body } = args;
