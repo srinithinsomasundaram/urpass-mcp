@@ -275,6 +275,174 @@ const TOOLS = [
     },
   },
   {
+    name: "send_announcement",
+    description: "Send a custom email announcement to attendees (approved, pending, or all).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        subject: { type: "string" },
+        message: { type: "string" },
+        audience: { type: "string", enum: ["all", "approved", "pending"] },
+      },
+      required: ["eventId", "subject", "message"],
+    },
+  },
+  {
+    name: "set_event_branding",
+    description: "Set event brand color, logo URL, and banner image URL.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        brandColor: { type: "string" },
+        logoUrl: { type: "string" },
+        bannerUrl: { type: "string" },
+        hideBranding: { type: "boolean" },
+      },
+      required: ["eventId"],
+    },
+  },
+  {
+    name: "configure_registration",
+    description: "Configure registration settings: auto-approve, waitlist, capacity, open/close window.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        autoApprove: { type: "boolean" },
+        waitlistEnabled: { type: "boolean" },
+        attendeeLimit: { type: "number" },
+        applicationEnabled: { type: "boolean" },
+        registrationOpensAt: { type: "string" },
+        registrationClosesAt: { type: "string" },
+      },
+      required: ["eventId"],
+    },
+  },
+  {
+    name: "add_registration_field",
+    description: "Add a custom field to the event registration form.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        label: { type: "string" },
+        type: { type: "string", enum: ["text", "textarea", "select", "checkbox", "phone", "email"] },
+        required: { type: "boolean" },
+        placeholder: { type: "string" },
+        options: { type: "array", items: { type: "string" } },
+      },
+      required: ["eventId", "label", "type"],
+    },
+  },
+  {
+    name: "bulk_approve",
+    description: "Bulk approve pending attendees, optionally filtered by email domain or ticket type.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        emailDomain: { type: "string" },
+        ticketType: { type: "string" },
+        limit: { type: "number" },
+      },
+      required: ["eventId"],
+    },
+  },
+  {
+    name: "update_ticket_tier",
+    description: "Update an existing ticket tier's name, price, capacity, or status.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        tierId: { type: "string" },
+        eventId: { type: "string" },
+        name: { type: "string" },
+        price: { type: "number" },
+        capacity: { type: "number" },
+        description: { type: "string" },
+        status: { type: "string", enum: ["draft", "on_sale", "closed"] },
+        maxPerPerson: { type: "number" },
+      },
+      required: ["tierId", "eventId"],
+    },
+  },
+  {
+    name: "add_check_in_gate",
+    description: "Create a named check-in gate (e.g. Main Entrance, VIP Gate).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        name: { type: "string" },
+        zone: { type: "string" },
+      },
+      required: ["eventId", "name"],
+    },
+  },
+  {
+    name: "list_check_in_gates",
+    description: "List all check-in gates for an event.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+      },
+      required: ["eventId"],
+    },
+  },
+  {
+    name: "close_event",
+    description: "Mark an event as completed or cancelled. Requires confirm: true.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        action: { type: "string", enum: ["complete", "cancel"] },
+        reason: { type: "string" },
+        confirm: { type: "boolean" },
+      },
+      required: ["eventId", "action"],
+    },
+  },
+  {
+    name: "add_agenda_session",
+    description: "Add a program session to the event agenda.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        title: { type: "string" },
+        session_type: { type: "string" },
+        session_date: { type: "string" },
+        start_time: { type: "string" },
+        end_time: { type: "string" },
+        room_id: { type: "string" },
+        track_id: { type: "string" },
+        capacity: { type: "number" },
+        registration_required: { type: "boolean" },
+        description: { type: "string" },
+      },
+      required: ["eventId", "title", "session_date", "start_time", "end_time"],
+    },
+  },
+  {
+    name: "list_agenda",
+    description: "List all program sessions in the event agenda.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" },
+        date: { type: "string" },
+        roomId: { type: "string" },
+        trackId: { type: "string" },
+        limit: { type: "number" },
+      },
+      required: ["eventId"],
+    },
+  },
+  {
     name: "design_ticket",
     description: "Customise the visual design of digital ticket passes for an event. Set template, style, brand colors, QR position, custom message, and category accent colors.",
     inputSchema: {
@@ -381,6 +549,53 @@ async function callTool(
     case "design_ticket": {
       const { eventId, ...body } = args;
       return urpass("PATCH", `/events/${eventId}/design`, body);
+    }
+    case "send_announcement": {
+      const { eventId, ...body } = args;
+      return urpass("POST", `/events/${eventId}/announce`, body);
+    }
+    case "set_event_branding": {
+      const { eventId, ...body } = args;
+      return urpass("PATCH", `/events/${eventId}/branding`, body);
+    }
+    case "configure_registration": {
+      const { eventId, ...body } = args;
+      return urpass("PATCH", `/events/${eventId}/registration`, body);
+    }
+    case "add_registration_field": {
+      const { eventId, ...body } = args;
+      return urpass("POST", `/events/${eventId}/registration/fields`, body);
+    }
+    case "bulk_approve": {
+      const { eventId, ...body } = args;
+      return urpass("POST", `/events/${eventId}/attendees/bulk-approve`, body);
+    }
+    case "update_ticket_tier": {
+      const { tierId, eventId, ...body } = args;
+      return urpass("PATCH", `/events/${eventId}/ticket-types/${tierId}`, body);
+    }
+    case "add_check_in_gate": {
+      const { eventId, ...body } = args;
+      return urpass("POST", `/events/${eventId}/gates`, body);
+    }
+    case "list_check_in_gates":
+      return urpass("GET", `/events/${args.eventId}/gates`);
+    case "close_event": {
+      const { eventId, ...body } = args;
+      return urpass("POST", `/events/${eventId}/close`, body);
+    }
+    case "add_agenda_session": {
+      const { eventId, ...body } = args;
+      return urpass("POST", `/events/${eventId}/sessions`, body);
+    }
+    case "list_agenda": {
+      const { eventId, date, roomId, trackId, limit } = args;
+      const p = new URLSearchParams();
+      if (date) p.set("date", String(date));
+      if (roomId) p.set("roomId", String(roomId));
+      if (trackId) p.set("trackId", String(trackId));
+      if (limit) p.set("limit", String(limit));
+      return urpass("GET", `/events/${eventId}/sessions?${p}`);
     }
     default:
       throw new Error(`Unknown tool: ${String(name)}`);

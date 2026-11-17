@@ -44,7 +44,7 @@ Full guide: [urpass.space/articles/connect-urpass-claude-mcp](https://urpass.spa
 
 ---
 
-## Tools (18)
+## Tools (29)
 
 | Tool | Description |
 |------|-------------|
@@ -66,6 +66,17 @@ Full guide: [urpass.space/articles/connect-urpass-claude-mcp](https://urpass.spa
 | `issue_pass` | Re-issue a QR pass |
 | `get_scanner_stats` | Real-time gate scanner stats |
 | `design_ticket` | Set ticket pass visual design (template, colors, style, QR, message) |
+| `send_announcement` | Blast a custom email to all approved / pending / all attendees |
+| `set_event_branding` | Set event brand color, logo, and banner image |
+| `configure_registration` | Set auto-approve, waitlist, capacity, open/close window |
+| `add_registration_field` | Add a custom field to the registration form |
+| `bulk_approve` | Bulk-approve pending attendees (filter by domain or tier) |
+| `update_ticket_tier` | Update price, capacity, name, or status of a tier |
+| `add_check_in_gate` | Create a named check-in gate (Main Entrance, VIP Gate…) |
+| `list_check_in_gates` | List all check-in gates for an event |
+| `close_event` | Mark event as completed or cancelled |
+| `add_agenda_session` | Add a program session to the event agenda |
+| `list_agenda` | List all program sessions in the agenda |
 
 ---
 
@@ -94,6 +105,24 @@ List all my draft events and tell me which ones are missing ticket tiers.
 ```
 ```
 Design my TEDx event tickets with a dark VIP gold style, primary color #D4AF37, and set VIP category to gold and General to indigo.
+```
+```
+Send an announcement to all approved attendees: "Gates open at 9 AM. Bring your QR pass."
+```
+```
+Set auto-approve on, enable waitlist, and close registration on December 20th.
+```
+```
+Add a required dropdown field asking attendees for their T-shirt size (S, M, L, XL, XXL).
+```
+```
+Bulk approve all pending attendees from iit.ac.in.
+```
+```
+Add three check-in gates: Main Entrance, VIP Lounge, and Press Entry.
+```
+```
+Add a keynote session "AI in India" on December 15th from 10 AM to 11 AM.
 ```
 
 ---
