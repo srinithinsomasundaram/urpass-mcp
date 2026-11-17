@@ -1,0 +1,34 @@
+{
+  "name": "urpass-mcp",
+  "version": "1.0.0",
+  "description": "Official UrPass MCP server — manage events, registrations, QR check-in, and analytics with Claude",
+  "keywords": ["mcp", "urpass", "events", "event-management", "claude", "ai", "model-context-protocol"],
+  "homepage": "https://urpass.space",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/srinithinsomasundaram/urpass-mcp.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "urpass-mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "files": ["dist", "README.md", "smithery.yaml"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

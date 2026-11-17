@@ -1,0 +1,21 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      apiKey:
+        type: string
+        title: UrPass API Key
+        description: >
+          Your UrPass API key. Find it in your dashboard under
+          Developer Settings → API Keys at urpass.space/dashboard/developer
+    required:
+      - apiKey
+  commandFunction: |-
+    ({ apiKey }) => ({
+      command: "npx",
+      args: ["-y", "urpass-mcp"],
+      env: {
+        URPASS_API_KEY: apiKey
+      }
+    })
