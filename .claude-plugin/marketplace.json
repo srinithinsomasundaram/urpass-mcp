@@ -1,0 +1,52 @@
+{
+  "schema_version": "v1",
+  "name": "UrPass Event Management",
+  "description": "Manage events, registrations, QR check-in, and live analytics through Claude. Create events, approve attendees, issue passes, and monitor gate activity — all from a conversation.",
+  "vendor": "UrPass",
+  "homepage": "https://urpass.space",
+  "support_url": "https://urpass.space/articles/connect-urpass-claude-mcp",
+  "privacy_policy_url": "https://urpass.space/privacy",
+  "logo_url": "https://urpass.space/icon.png",
+  "type": "mcp_server",
+  "server": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "urpass-mcp"],
+    "env": {
+      "URPASS_API_KEY": "${config.apiKey}"
+    }
+  },
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "apiKey": {
+        "type": "string",
+        "title": "UrPass API Key",
+        "description": "Your UrPass API key from Dashboard → Developer Settings (urpass.space/dashboard/developer)",
+        "secret": true
+      }
+    },
+    "required": ["apiKey"]
+  },
+  "tools": [
+    { "name": "list_events",          "description": "List your events, filter by status" },
+    { "name": "get_event",            "description": "Full event details with live stats" },
+    { "name": "create_event",         "description": "Create a new event" },
+    { "name": "update_event",         "description": "Update event details" },
+    { "name": "publish_event",        "description": "Publish a draft event" },
+    { "name": "get_event_readiness",  "description": "Pre-flight check before publishing" },
+    { "name": "list_ticket_tiers",    "description": "View ticket tiers and availability" },
+    { "name": "create_ticket_tier",   "description": "Add a new ticket tier" },
+    { "name": "list_attendees",       "description": "List attendees, filter by status" },
+    { "name": "approve_attendee",     "description": "Approve and issue QR pass" },
+    { "name": "reject_attendee",      "description": "Reject an attendee" },
+    { "name": "get_registrations",    "description": "View registration form submissions" },
+    { "name": "get_event_analytics",  "description": "Live check-in analytics" },
+    { "name": "verify_checkin",       "description": "Check in an attendee by QR token" },
+    { "name": "lookup_pass",          "description": "Look up a pass by name or email" },
+    { "name": "issue_pass",           "description": "Re-issue a QR pass" },
+    { "name": "get_scanner_stats",    "description": "Real-time gate scanner statistics" }
+  ],
+  "categories": ["productivity", "event-management"],
+  "keywords": ["events", "ticketing", "qr", "check-in", "registration", "india"]
+}
