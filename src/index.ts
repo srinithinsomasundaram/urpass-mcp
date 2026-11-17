@@ -274,6 +274,39 @@ const TOOLS = [
       required: ["eventId"],
     },
   },
+  {
+    name: "design_ticket",
+    description: "Customise the visual design of digital ticket passes for an event. Set template, style, brand colors, QR position, custom message, and category accent colors.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string", description: "Event UUID" },
+        template: { type: "string", enum: ["minimal", "event", "dark", "modern"] },
+        ticketStyle: { type: "string", enum: ["concert", "cinema", "boarding", "vip_gold", "stadium", "vintage", "cyber", "executive"] },
+        primaryColor: { type: "string", description: "Primary brand color as hex (e.g. #635BFF)" },
+        secondaryColor: { type: "string", description: "Secondary accent color as hex" },
+        shape: { type: "string", enum: ["standard", "rounded", "compact"] },
+        format: { type: "string", enum: ["mobile", "badge", "print"] },
+        pattern: { type: "string", enum: ["mesh", "dots", "radial", "stripes", "clean"] },
+        fontFamily: { type: "string", enum: ["sans", "mono", "serif"] },
+        headerStyle: { type: "string", enum: ["gradient", "solid", "glass"] },
+        badgeLabel: { type: "string", description: "Short label on badge (e.g. SPEAKER, VIP)" },
+        footerNote: { type: "string", description: "Custom footer note on every pass" },
+        accentGlow: { type: "boolean" },
+        customMessage: { type: "string", description: "Custom message on the pass (max 160 chars)" },
+        customInstruction: { type: "string", description: "Gate/entry instruction for attendees (max 160 chars)" },
+        categoryColors: { type: "object", description: "Map of ticket category names to hex accent colors", additionalProperties: { type: "string" } },
+        showAttendeeName: { type: "boolean" },
+        showTicketType: { type: "boolean" },
+        showEventDate: { type: "boolean" },
+        showVenue: { type: "boolean" },
+        showTicketId: { type: "boolean" },
+        qrSize: { type: "string", enum: ["sm", "md", "lg"] },
+        qrPosition: { type: "string", enum: ["center", "bottom"] },
+      },
+      required: ["eventId"],
+    },
+  },
 ] as const;
 
 type ToolName = (typeof TOOLS)[number]["name"];
@@ -345,6 +378,10 @@ async function callTool(
       });
     case "get_scanner_stats":
       return urpass("GET", `/events/${args.eventId}/check-in?stats=true`);
+    case "design_ticket": {
+      const { eventId, ...body } = args;
+      return urpass("PATCH", `/events/${eventId}/design`, body);
+    }
     default:
       throw new Error(`Unknown tool: ${String(name)}`);
   }

@@ -44,7 +44,7 @@ Full guide: [urpass.space/articles/connect-urpass-claude-mcp](https://urpass.spa
 
 ---
 
-## Tools (17)
+## Tools (18)
 
 | Tool | Description |
 |------|-------------|
@@ -65,6 +65,7 @@ Full guide: [urpass.space/articles/connect-urpass-claude-mcp](https://urpass.spa
 | `lookup_pass` | Look up a pass by name or email |
 | `issue_pass` | Re-issue a QR pass |
 | `get_scanner_stats` | Real-time gate scanner stats |
+| `design_ticket` | Set ticket pass visual design (template, colors, style, QR, message) |
 
 ---
 
@@ -90,6 +91,9 @@ How many people checked in between 9am and 10am?
 ```
 ```
 List all my draft events and tell me which ones are missing ticket tiers.
+```
+```
+Design my TEDx event tickets with a dark VIP gold style, primary color #D4AF37, and set VIP category to gold and General to indigo.
 ```
 
 ---
