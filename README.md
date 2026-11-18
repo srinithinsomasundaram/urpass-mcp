@@ -44,7 +44,7 @@ Full guide: [urpass.space/articles/connect-urpass-claude-mcp](https://urpass.spa
 
 ---
 
-## Tools (33)
+## Tools (38)
 
 | Tool | Description |
 |------|-------------|
@@ -69,6 +69,11 @@ Full guide: [urpass.space/articles/connect-urpass-claude-mcp](https://urpass.spa
 | `apply_ticket_template` | Apply a studio template by ID with color + logo override |
 | `update_ticket_canvas` | Edit background, swap accent colors, set pattern, publish |
 | `publish_ticket_studio` | Validate QR contrast + publish the studio design live |
+| `list_studio_elements` | List all canvas elements with ids, positions, and style |
+| `update_studio_element` | Patch any element property by id (color, font, pos, text…) |
+| `add_studio_element` | Add new element: text, dynamic field, shape, image, QR, divider |
+| `remove_studio_element` | Delete a canvas element by id |
+| `build_custom_studio_design` | Build a full custom design from scratch (no template needed) |
 | `design_ticket` | Set ticket pass visual design (template, colors, style, QR, message) |
 | `send_announcement` | Blast a custom email to all approved / pending / all attendees |
 | `set_event_branding` | Set event brand color, logo, and banner image |

@@ -498,6 +498,82 @@ const TOOLS = [
     },
   },
   {
+    name: "list_studio_elements",
+    description: "List all canvas elements with their ids, positions, sizes, and style properties.",
+    inputSchema: {
+      type: "object",
+      properties: { eventId: { type: "string" } },
+      required: ["eventId"],
+    },
+  },
+  {
+    name: "update_studio_element",
+    description: "Update any property of a canvas element by its id.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" }, elementId: { type: "string" },
+        x: { type: "number" }, y: { type: "number" }, width: { type: "number" }, height: { type: "number" },
+        rotation: { type: "number" }, zIndex: { type: "number" }, locked: { type: "boolean" }, hidden: { type: "boolean" }, opacity: { type: "number" },
+        content: { type: "string" }, fieldKey: { type: "string" }, fallbackText: { type: "string" },
+        fontSize: { type: "number" }, fontWeight: { type: "number" }, color: { type: "string" }, fontFamily: { type: "string" },
+        textAlign: { type: "string" }, letterSpacing: { type: "number" }, lineHeight: { type: "number" },
+        textTransform: { type: "string" }, prefix: { type: "string" }, suffix: { type: "string" },
+        fillColor: { type: "string" }, borderColor: { type: "string" }, borderWidth: { type: "number" }, borderRadius: { type: "number" },
+        shapeType: { type: "string" }, src: { type: "string" }, objectFit: { type: "string" },
+        fgColor: { type: "string" }, bgColor: { type: "string" }, cornerRadius: { type: "number" }, showScanLabel: { type: "boolean" }, scanLabelText: { type: "string" },
+        dividerColor: { type: "string" }, thickness: { type: "number" }, dividerStyle: { type: "string" },
+      },
+      required: ["eventId", "elementId"],
+    },
+  },
+  {
+    name: "add_studio_element",
+    description: "Add a new element (text, dynamic_text, shape, image, qr, divider) to the canvas.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" }, type: { type: "string" }, name: { type: "string" },
+        x: { type: "number" }, y: { type: "number" }, width: { type: "number" }, height: { type: "number" }, zIndex: { type: "number" },
+        content: { type: "string" }, fieldKey: { type: "string" }, fallbackText: { type: "string" },
+        fontSize: { type: "number" }, fontWeight: { type: "number" }, color: { type: "string" }, fontFamily: { type: "string" },
+        textAlign: { type: "string" }, letterSpacing: { type: "number" }, textTransform: { type: "string" },
+        prefix: { type: "string" }, suffix: { type: "string" },
+        shapeType: { type: "string" }, fillColor: { type: "string" }, borderColor: { type: "string" }, borderWidth: { type: "number" }, borderRadius: { type: "number" }, opacity: { type: "number" },
+        src: { type: "string" }, objectFit: { type: "string" },
+        fgColor: { type: "string" }, bgColor: { type: "string" }, cornerRadius: { type: "number" }, showScanLabel: { type: "boolean" },
+        dividerColor: { type: "string" }, thickness: { type: "number" }, dividerStyle: { type: "string" },
+      },
+      required: ["eventId", "type", "name", "x", "y", "width", "height"],
+    },
+  },
+  {
+    name: "remove_studio_element",
+    description: "Remove a canvas element by its id.",
+    inputSchema: {
+      type: "object",
+      properties: { eventId: { type: "string" }, elementId: { type: "string" } },
+      required: ["eventId", "elementId"],
+    },
+  },
+  {
+    name: "build_custom_studio_design",
+    description: "Build a complete ticket design from scratch with specified background, accent color, format, and content fields.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        eventId: { type: "string" }, format: { type: "string", enum: ["digital","printable","badge"] },
+        name: { type: "string" }, backgroundColor: { type: "string" }, backgroundType: { type: "string" },
+        backgroundSecondaryColor: { type: "string" }, backgroundGradientAngle: { type: "number" }, backgroundPattern: { type: "string" },
+        primaryColor: { type: "string" }, logoUrl: { type: "string" },
+        showAttendeeName: { type: "boolean" }, showTicketCategory: { type: "boolean" }, showEventName: { type: "boolean" },
+        showEventDate: { type: "boolean" }, showVenue: { type: "boolean" }, showQr: { type: "boolean" },
+        publish: { type: "boolean" },
+      },
+      required: ["eventId", "backgroundColor", "primaryColor"],
+    },
+  },
+  {
     name: "design_ticket",
     description: "Customise the visual design of digital ticket passes for an event. Set template, style, brand colors, QR position, custom message, and category accent colors.",
     inputSchema: {
@@ -618,6 +694,22 @@ async function callTool(
     case "publish_ticket_studio": {
       const { eventId, ...body } = args;
       return urpass("POST", `/events/${eventId}/studio/publish`, body);
+    }
+    case "list_studio_elements":
+      return urpass("GET", `/events/${args.eventId}/studio/elements`);
+    case "update_studio_element": {
+      const { eventId, elementId, ...body } = args;
+      return urpass("PATCH", `/events/${eventId}/studio/elements/${elementId}`, body);
+    }
+    case "add_studio_element": {
+      const { eventId, ...body } = args;
+      return urpass("POST", `/events/${eventId}/studio/elements`, body);
+    }
+    case "remove_studio_element":
+      return urpass("DELETE", `/events/${args.eventId}/studio/elements/${args.elementId}`);
+    case "build_custom_studio_design": {
+      const { eventId, ...body } = args;
+      return urpass("POST", `/events/${eventId}/studio/build`, body);
     }
     case "send_announcement": {
       const { eventId, ...body } = args;
